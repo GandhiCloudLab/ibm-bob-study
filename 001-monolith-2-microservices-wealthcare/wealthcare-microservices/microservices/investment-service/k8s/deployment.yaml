@@ -1,0 +1,136 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: investment-service
+  namespace: wealthcare
+  labels:
+    app: investment-service
+    version: v1
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: investment-service
+  template:
+    metadata:
+      labels:
+        app: investment-service
+        version: v1
+    spec:
+      containers:
+      - name: investment-service
+        image: wealthcare/investment-service:1.0.0
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8084
+          name: http
+          protocol: TCP
+        env:
+        - name: SPRING_PROFILES_ACTIVE
+          value: "prod"
+        - name: CUSTOMER_SERVICE_URL
+          value: "http://customer-service:8082"
+        - name: GOAL_SERVICE_URL
+          value: "http://goal-service:8083"
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "250m"
+          limits:
+            memory: "1Gi"
+            cpu: "500m"
+        livenessProbe:
+          httpGet:
+            path: /actuator/health/liveness
+            port: 8084
+          initialDelaySeconds: 60
+          periodSeconds: 10
+          timeoutSeconds: 3
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /actuator/health/readiness
+            port: 8084
+          initialDelaySeconds: 30
+          periodSeconds: 5
+          timeoutSeconds: 3
+          failureThreshold: 3
+        volumeMounts:
+        - name: data
+          mountPath: /app/data
+      volumes:
+      - name: data
+        persistentVolumeClaim:
+          claimName: investment-service-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: investment-service
+  namespace: wealthcare
+  labels:
+    app: investment-service
+spec:
+  type: ClusterIP
+  ports:
+  - port: 8084
+    targetPort: 8084
+    protocol: TCP
+    name: http
+  selector:
+    app: investment-service
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: investment-service-pvc
+  namespace: wealthcare
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 2Gi
+  storageClassName: standard
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: investment-service-config
+  namespace: wealthcare
+data:
+  application.yml: |
+    spring:
+      application:
+        name: investment-service
+      datasource:
+        url: jdbc:h2:file:/app/data/investment-db;DB_CLOSE_ON_EXIT=FALSE;AUTO_RECONNECT=TRUE
+        driver-class-name: org.h2.Driver
+        username: sa
+        password: 
+      jpa:
+        hibernate:
+          ddl-auto: update
+        show-sql: false
+    server:
+      port: 8084
+    services:
+      customer-service:
+        url: http://customer-service:8082
+      goal-service:
+        url: http://goal-service:8083
+    management:
+      endpoints:
+        web:
+          exposure:
+            include: health,info,metrics,prometheus
+      endpoint:
+        health:
+          show-details: always
+          probes:
+            enabled: true
+    logging:
+      level:
+        com.gan.wcare: INFO
+
+# Made with Bob

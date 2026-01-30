@@ -1,0 +1,132 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: customer-service
+  namespace: wealthcare
+  labels:
+    app: customer-service
+    version: v1
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: customer-service
+  template:
+    metadata:
+      labels:
+        app: customer-service
+        version: v1
+    spec:
+      containers:
+      - name: customer-service
+        image: wealthcare/customer-service:1.0.0
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8082
+          name: http
+          protocol: TCP
+        env:
+        - name: SPRING_PROFILES_ACTIVE
+          value: "prod"
+        - name: USER_SERVICE_URL
+          value: "http://user-service:8081"
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "250m"
+          limits:
+            memory: "1Gi"
+            cpu: "500m"
+        livenessProbe:
+          httpGet:
+            path: /actuator/health/liveness
+            port: 8082
+          initialDelaySeconds: 60
+          periodSeconds: 10
+          timeoutSeconds: 3
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /actuator/health/readiness
+            port: 8082
+          initialDelaySeconds: 30
+          periodSeconds: 5
+          timeoutSeconds: 3
+          failureThreshold: 3
+        volumeMounts:
+        - name: data
+          mountPath: /app/data
+      volumes:
+      - name: data
+        persistentVolumeClaim:
+          claimName: customer-service-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: customer-service
+  namespace: wealthcare
+  labels:
+    app: customer-service
+spec:
+  type: ClusterIP
+  ports:
+  - port: 8082
+    targetPort: 8082
+    protocol: TCP
+    name: http
+  selector:
+    app: customer-service
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: customer-service-pvc
+  namespace: wealthcare
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  storageClassName: standard
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: customer-service-config
+  namespace: wealthcare
+data:
+  application.yml: |
+    spring:
+      application:
+        name: customer-service
+      datasource:
+        url: jdbc:h2:file:/app/data/customer-db;DB_CLOSE_ON_EXIT=FALSE;AUTO_RECONNECT=TRUE
+        driver-class-name: org.h2.Driver
+        username: sa
+        password: 
+      jpa:
+        hibernate:
+          ddl-auto: update
+        show-sql: false
+    server:
+      port: 8082
+    services:
+      user-service:
+        url: http://user-service:8081
+    management:
+      endpoints:
+        web:
+          exposure:
+            include: health,info,metrics,prometheus
+      endpoint:
+        health:
+          show-details: always
+          probes:
+            enabled: true
+    logging:
+      level:
+        com.gan.wcare: INFO
+
+# Made with Bob

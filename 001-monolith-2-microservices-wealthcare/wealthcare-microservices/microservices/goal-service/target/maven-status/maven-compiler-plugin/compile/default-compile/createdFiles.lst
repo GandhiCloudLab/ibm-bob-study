@@ -1,0 +1,9 @@
+com/gan/wcare/goal/config/WebConfig$1.class
+com/gan/wcare/goal/config/WebConfig.class
+com/gan/wcare/goal/controller/GoalController.class
+com/gan/wcare/goal/service/GoalService.class
+com/gan/wcare/goal/dto/GoalDTO.class
+com/gan/wcare/goal/model/Goal.class
+com/gan/wcare/goal/dto/GoalDTO$GoalDTOBuilder.class
+com/gan/wcare/goal/GoalServiceApplication.class
+com/gan/wcare/goal/repository/GoalRepository.class

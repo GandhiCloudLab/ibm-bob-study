@@ -1,0 +1,67 @@
+server:
+  port: 8084
+
+spring:
+  application:
+    name: investment-service
+  datasource:
+    url: jdbc:h2:file:./data/investment-db;DB_CLOSE_ON_EXIT=FALSE;AUTO_RECONNECT=TRUE
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: 
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+    defer-datasource-initialization: true
+  sql:
+    init:
+      mode: always
+
+# External service URLs
+services:
+  customer-service:
+    url: http://localhost:8082
+  goal-service:
+    url: http://localhost:8083
+
+# API Documentation
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    enabled: true
+
+# Actuator endpoints
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+  endpoint:
+    health:
+      show-details: always
+      probes:
+        enabled: true
+  health:
+    livenessState:
+      enabled: true
+    readinessState:
+      enabled: true
+
+# Logging
+logging:
+  level:
+    com.gan.wcare: DEBUG
+    org.springframework.web: INFO
+    org.hibernate: INFO
+
+# Made with Bob

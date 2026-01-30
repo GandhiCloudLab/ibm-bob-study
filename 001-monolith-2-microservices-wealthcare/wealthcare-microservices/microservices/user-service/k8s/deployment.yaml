@@ -1,0 +1,141 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: user-service
+  namespace: wealthcare
+  labels:
+    app: user-service
+    version: v1
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: user-service
+  template:
+    metadata:
+      labels:
+        app: user-service
+        version: v1
+    spec:
+      containers:
+      - name: user-service
+        image: wealthcare/user-service:1.0.0
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8081
+          name: http
+          protocol: TCP
+        env:
+        - name: SPRING_PROFILES_ACTIVE
+          value: "prod"
+        - name: JWT_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: user-service-secret
+              key: jwt-secret
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "250m"
+          limits:
+            memory: "1Gi"
+            cpu: "500m"
+        livenessProbe:
+          httpGet:
+            path: /actuator/health/liveness
+            port: 8081
+          initialDelaySeconds: 60
+          periodSeconds: 10
+          timeoutSeconds: 3
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /actuator/health/readiness
+            port: 8081
+          initialDelaySeconds: 30
+          periodSeconds: 5
+          timeoutSeconds: 3
+          failureThreshold: 3
+        volumeMounts:
+        - name: data
+          mountPath: /app/data
+      volumes:
+      - name: data
+        persistentVolumeClaim:
+          claimName: user-service-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: user-service
+  namespace: wealthcare
+  labels:
+    app: user-service
+spec:
+  type: ClusterIP
+  ports:
+  - port: 8081
+    targetPort: 8081
+    protocol: TCP
+    name: http
+  selector:
+    app: user-service
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: user-service-pvc
+  namespace: wealthcare
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  storageClassName: standard
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: user-service-secret
+  namespace: wealthcare
+type: Opaque
+stringData:
+  jwt-secret: "wealthcare-secret-key-for-jwt-token-generation-change-in-production"
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: user-service-config
+  namespace: wealthcare
+data:
+  application.yml: |
+    spring:
+      application:
+        name: user-service
+      datasource:
+        url: jdbc:h2:file:/app/data/user-db;DB_CLOSE_ON_EXIT=FALSE;AUTO_RECONNECT=TRUE
+        driver-class-name: org.h2.Driver
+        username: sa
+        password: 
+      jpa:
+        hibernate:
+          ddl-auto: update
+        show-sql: false
+    server:
+      port: 8081
+    management:
+      endpoints:
+        web:
+          exposure:
+            include: health,info,metrics,prometheus
+      endpoint:
+        health:
+          show-details: always
+          probes:
+            enabled: true
+    logging:
+      level:
+        com.gan.wcare: INFO
+
+# Made with Bob

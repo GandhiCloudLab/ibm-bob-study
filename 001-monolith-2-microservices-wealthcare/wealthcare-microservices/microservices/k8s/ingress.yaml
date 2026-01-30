@@ -1,0 +1,115 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: wealthcare-ingress
+  namespace: wealthcare
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    nginx.ingress.kubernetes.io/use-regex: "true"
+    nginx.ingress.kubernetes.io/cors-allow-origin: "*"
+    nginx.ingress.kubernetes.io/cors-allow-methods: "GET, POST, PUT, DELETE, OPTIONS"
+    nginx.ingress.kubernetes.io/cors-allow-headers: "DNT,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Range,Authorization"
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: wealthcare.local
+    http:
+      paths:
+      # User Service Routes
+      - path: /api/auth(/|$)(.*)
+        pathType: Prefix
+        backend:
+          service:
+            name: user-service
+            port:
+              number: 8081
+      
+      - path: /api/users(/|$)(.*)
+        pathType: Prefix
+        backend:
+          service:
+            name: user-service
+            port:
+              number: 8081
+      
+      # Customer Service Routes
+      - path: /api/customers(/|$)(.*)
+        pathType: Prefix
+        backend:
+          service:
+            name: customer-service
+            port:
+              number: 8082
+      
+      # Goal Service Routes (to be implemented)
+      # - path: /api/goals(/|$)(.*)
+      #   pathType: Prefix
+      #   backend:
+      #     service:
+      #       name: goal-service
+      #       port:
+      #         number: 8083
+      
+      # Investment Service Routes (to be implemented)
+      # - path: /api/investments(/|$)(.*)
+      #   pathType: Prefix
+      #   backend:
+      #     service:
+      #       name: investment-service
+      #       port:
+      #         number: 8084
+      
+      # Quote Service Routes (to be implemented)
+      # - path: /api/quotes(/|$)(.*)
+      #   pathType: Prefix
+      #   backend:
+      #     service:
+      #       name: quote-service
+      #       port:
+      #         number: 8085
+      
+      # API Gateway Route (to be implemented)
+      # - path: /(.*)
+      #   pathType: Prefix
+      #   backend:
+      #     service:
+      #       name: api-gateway
+      #       port:
+      #         number: 8080
+---
+# Alternative Ingress without path rewriting (simpler approach)
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: wealthcare-ingress-simple
+  namespace: wealthcare
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    nginx.ingress.kubernetes.io/cors-allow-origin: "*"
+    nginx.ingress.kubernetes.io/cors-allow-methods: "GET, POST, PUT, DELETE, OPTIONS"
+    nginx.ingress.kubernetes.io/cors-allow-headers: "DNT,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Range,Authorization"
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: wealthcare.local
+    http:
+      paths:
+      # Direct service access
+      - path: /user-service
+        pathType: Prefix
+        backend:
+          service:
+            name: user-service
+            port:
+              number: 8081
+      
+      - path: /customer-service
+        pathType: Prefix
+        backend:
+          service:
+            name: customer-service
+            port:
+              number: 8082
+
+# Made with Bob

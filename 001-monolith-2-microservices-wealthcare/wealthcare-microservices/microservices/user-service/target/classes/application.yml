@@ -1,0 +1,66 @@
+spring:
+  application:
+    name: user-service
+  
+  datasource:
+    url: jdbc:h2:file:./data/user-db;DB_CLOSE_ON_EXIT=FALSE;AUTO_RECONNECT=TRUE
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: 
+  
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+  
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+    defer-datasource-initialization: true
+  
+  sql:
+    init:
+      mode: always
+
+server:
+  port: 8081
+  servlet:
+    context-path: /
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+  endpoint:
+    health:
+      show-details: always
+
+# JWT Configuration
+jwt:
+  secret: wealthcare-secret-key-for-jwt-token-generation-change-in-production
+  expiration: 86400000  # 24 hours in milliseconds
+
+# Logging
+logging:
+  level:
+    com.gan.wcare: DEBUG
+    org.springframework.security: DEBUG
+    org.hibernate.SQL: DEBUG
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
+
+# Swagger/OpenAPI
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    enabled: true
+
+# Made with Bob
