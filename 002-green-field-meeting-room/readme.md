@@ -1,6 +1,6 @@
-# Developing Meeting Room booking App using IBM Bob
+# Developing a Meeting Room Booking Application Using IBM Bob
 
-Leveraging IBM Bob to build a modern web-based meeting room booking system built with React and Spring Boot, designed for medium-sized organizations (50-200 users) with admin room management, user booking capabilities, authentication, and conflict detection.
+This project demonstrates how IBM Bob is leveraged to build a modern, web‑based meeting room booking application using React and Spring Boot. The solution is designed for medium‑sized organizations (50–200 users) and includes administrative room management, secure user authentication, meeting room booking with conflict detection, and booking visibility.
 
 ## Tech Stack
 
