@@ -1,45 +1,171 @@
-# Meeting Room booking App development using IBM Bob
+# Developing Meeting Room booking App using IBM Bob
 
-  <img src="images/img-11.png" >
+# Meeting Room Booking Application
+
+A modern web-based meeting room booking system built with React and Spring Boot, designed for medium-sized organizations (50-200 users) with admin room management, user booking capabilities, authentication, and conflict detection.
+
+## Tech Stack
+
+### Frontend
+- **Framework**: React 18+ with TypeScript
+
+### Backend
+- **Framework**: Spring Boot 3.x
+- **Language**: Java 17 or 21 LTS
+
+### Deployment
+- **Platform**: IBM Code Engine
+- **Containerization**: Docker
+- **Frontend Serving**: Nginx (within container) or serve as static files
+- **Backend**: Spring Boot embedded Tomcat
+
+## High-Level Architecture
+
+```mermaid
+graph TB
+    subgraph "Client Layer"
+        A[React Frontend]
+    end
+    
+    subgraph "IBM Code Engine"
+        subgraph "Application Layer"
+            B[Spring Boot API]
+        end
+        
+        subgraph "Data Layer"
+            C[H2 Database]
+        end
+    end
+    
+    A -->|HTTPS/REST API| B
+    B -->|JPA/JDBC| C
+```
+
+## Building the App Bsing Bob
+
+### 1. Start in Plan Mode
+
+- IBM Bob was started in Plan mode.
+
+### 2. Provide the Initial Prompt
+
+- The following prompt was entered to request Bob to suggest the technology stack and architecture:
+
+```
+Need to build a simple web-based Meeting Room Booking application. The admin should be able to manage meeting rooms (create, update, and delete). Users should be able to book a meeting room for a specific time period during the day and view all bookings.
+
+Can you suggest me the possible tech stack and architectures?
+```
+
+<img src="images/img-11.png" >
+
+### 3. Review Tech Stack Options
+
+- Bob listed multiple technology stack options.
+
+### 4. Select Preferred Stack
+
+- The React + Spring Boot–based stack was selected.
 
 <img src="images/img-12.png" >
 
+### 5. Define Application Scale
+
+- Bob asked for the expected scale of the application.
+- The 50–100 users option was selected.
+
 <img src="images/img-13.png" >
+
+### 6. Review and Approve To‑Do List
+
+- Bob generated a to‑do list based on the provided prompt.
+- The to‑do list was reviewed and approved.
 
 <img src="images/img-14.png" >
 
+### 7. Architecture & Tech Stack Recommendation
+
+- Bob created the architecture and technology stack recommendation document.
+
 <img src="images/img-15.png" >
+
+### 8. Approve the Plan
+
+- Bob requested approval for the recommended architecture and implementation plan.
 
 <img src="images/img-16.png" >
 
+### 9. Planning Summary
+
+- Bob displayed the planning summary.
+
 <img src="images/img-17.png" >
+
+### 10. Switch to Advanced Mode
+
+- Bob requested switching to Advanced mode.
+- The request was approved.
 
 <img src="images/img-18.png" >
 
+### 11. Begin Implementation
+
+- Bob was prompted to proceed with the implementation.
+
 <img src="images/img-19.png" >
+
+### 12. Project Structure Setup
+
+- Bob requested approval to create the project structure.
 
 <img src="images/img-20.png" >
 
+### 13. Backend Development
+
+- Bob requested approval for the next steps, including:
+- Database schema creation
+
 <img src="images/img-21.png" >
 
-<img src="images/img-22.png" >
+- Backend implementation
 
 <img src="images/img-23.png" >
 
-<img src="images/img-24.png" >
+### 14. Frontend Development
+
+- Bob was prompted to implement the frontend.
 
 <img src="images/img-25.png" >
 
+- Frontend foundation was completed.
+
 <img src="images/img-26.png" >
 
+### 15. Frontend Dependencies
+
+- Bob requested approval to run frontend dependencies.
+- Approval was granted.
+
 <img src="images/img-27.png" >
+
+### 16. Application Testing
+
+- Bob requested approval to test the complete application flow.
+- End‑to‑end testing was executed successfully.
 
 <img src="images/img-28.png" >
 
 <img src="images/img-29.png" >
 
-<img src="images/img-30.png" >
+### 17. Deployment Configuration
+
+- Bob requested approval to generate deployment configuration for IBM Code Engine.
 
 <img src="images/img-31.png" >
+
+### 18. Final Output
+
+- All generated source code and Markdown documentation files are now available in the [/project](project) folder.
+
 
 
