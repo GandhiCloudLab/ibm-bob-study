@@ -1,19 +1,17 @@
 # Developing Meeting Room booking App using IBM Bob
 
-# Meeting Room Booking Application
-
-A modern web-based meeting room booking system built with React and Spring Boot, designed for medium-sized organizations (50-200 users) with admin room management, user booking capabilities, authentication, and conflict detection.
+Leveraging IBM Bob to build a modern web-based meeting room booking system built with React and Spring Boot, designed for medium-sized organizations (50-200 users) with admin room management, user booking capabilities, authentication, and conflict detection.
 
 ## Tech Stack
 
-### Frontend
+#### Frontend
 - **Framework**: React 18+ with TypeScript
 
-### Backend
+#### Backend
 - **Framework**: Spring Boot 3.x
 - **Language**: Java 17 or 21 LTS
 
-### Deployment
+#### Deployment
 - **Platform**: IBM Code Engine
 - **Containerization**: Docker
 - **Frontend Serving**: Nginx (within container) or serve as static files
@@ -41,7 +39,7 @@ graph TB
     B -->|JPA/JDBC| C
 ```
 
-## Building the App Bsing Bob
+## Building the App Using Bob
 
 ### 1. Start in Plan Mode
 
@@ -92,6 +90,7 @@ Can you suggest me the possible tech stack and architectures?
 ### 8. Approve the Plan
 
 - Bob requested approval for the recommended architecture and implementation plan.
+- The request was approved.
 
 <img src="images/img-16.png" >
 
@@ -117,6 +116,7 @@ Can you suggest me the possible tech stack and architectures?
 ### 12. Project Structure Setup
 
 - Bob requested approval to create the project structure.
+- The request was approved.
 
 <img src="images/img-20.png" >
 
@@ -124,10 +124,11 @@ Can you suggest me the possible tech stack and architectures?
 
 - Bob requested approval for the next steps, including:
 - Database schema creation
+- The request was approved.
 
 <img src="images/img-21.png" >
 
-- Backend implementation
+- Backend implementation completed.
 
 <img src="images/img-23.png" >
 
@@ -160,6 +161,7 @@ Can you suggest me the possible tech stack and architectures?
 ### 17. Deployment Configuration
 
 - Bob requested approval to generate deployment configuration for IBM Code Engine.
+- The request was approved.
 
 <img src="images/img-31.png" >
 
@@ -168,4 +170,19 @@ Can you suggest me the possible tech stack and architectures?
 - All generated source code and Markdown documentation files are now available in the [/project](project) folder.
 
 
+## The App
+
+Here is the Bob generated App.
+
+1. Home Page of the application
+
+<img src="images/img-32.png" >
+
+2. Meeting rooms dashboard
+
+<img src="images/img-33.png" >
+
+3. Meeting room edit page
+
+<img src="images/img-34.png" >
 
