@@ -6,13 +6,13 @@ This article demonstrates how IBM Bob is leveraged to build a simple Python  Fla
 ## 🏗️ Architecture Diagram
 
 ```
-┌─────────────────────────────────────────────────────────────────┐
+┌─────────────────────────────────────────────────────────────────-┐
 │                     Development Environment                      │
-│                                                                   │
-│  ┌──────────────┐      ┌──────────────┐      ┌──────────────┐  │
-│  │   app.py     │      │ Dockerfile   │      │requirements  │  │
-│  │  (Flask App) │      │              │      │    .txt      │  │
-│  └──────────────┘      └──────────────┘      └──────────────┘  │
+│                                                                  │
+│  ┌──────────────┐      ┌──────────────┐      ┌──────────────┐    │
+│  │   app.py     │      │ Dockerfile   │      │requirements  │    │
+│  │  (Flask App) │      │              │      │    .txt      │    │
+│  └──────────────┘      └──────────────┘      └──────────────┘    │
 │         │                      │                      │          │
 │         └──────────────────────┴──────────────────────┘          │
 │                                │                                 │
@@ -25,30 +25,30 @@ This article demonstrates how IBM Bob is leveraged to build a simple Python  Fla
                     └────────────────────────┘
                                  │
                                  ▼
-┌─────────────────────────────────────────────────────────────────┐
+┌────────────────────────────────────────────────────────────────-─┐
 │                    IBM Container Registry                        │
 │                    (us.icr.io)                                   │
-│                                                                   │
+│                                                                  │
 │  Namespace: cr-itz-3uehbja7                                      │
 │  Image: python-web-app:latest                                    │
-│                                                                   │
-└────────────────────────────────┬────────────────────────────────┘
+│                                                                  │
+└────────────────────────────────┬────────────────────────────────-┘
                                  │
                                  ▼
 ┌─────────────────────────────────────────────────────────────────┐
-│                      IBM Code Engine                             │
-│                                                                   │
+│                      IBM Code Engine                            │
+│                                                                 │
 │  ┌────────────────────────────────────────────────────────┐     │
 │  │  Project: python-web-app-project                       │     │
 │  │  Resource Group: itz-wxo-697b4e2bf2289c92dfa7cf        │     │
-│  │                                                         │     │
-│  │  ┌──────────────────────────────────────────────┐     │     │
-│  │  │  Application: python-web-app                 │     │     │
-│  │  │  Port: 8080                                  │     │     │
-│  │  │  Auto-scaling: Enabled                       │     │     │
-│  │  └──────────────────────────────────────────────┘     │     │
+│  │                                                        │     │
+│  │  ┌──────────────────────────────────────────────┐      │     │
+│  │  │  Application: python-web-app                 │      │     │
+│  │  │  Port: 8080                                  │      │     │
+│  │  │  Auto-scaling: Enabled                       │      │     │
+│  │  └──────────────────────────────────────────────┘      │     │
 │  └────────────────────────────────────────────────────────┘     │
-│                                                                   │
+│                                                                 │
 └────────────────────────────────┬────────────────────────────────┘
                                  │
                                  ▼
@@ -92,9 +92,9 @@ This article demonstrates how IBM Bob is leveraged to build a simple Python  Fla
 
 ## Building the App Using Bob
 
-### 1. Provide the Initial Prompt in the Bob
+### 1. Provide the Initial Prompt to Bob
 
-- The following prompt was entered to request Bob to create the app.
+- The following prompt was entered to request Bob to create the app:
 
 ```
 Generate a simple web app using python.
@@ -108,73 +108,72 @@ The API Key for IBM Cloud is "xxxxxxxxxxx"
 
 <img src="images/img-11.png" >
 
-### 2. Review and Approve To‑Do List
+### 2. Review and Approve the To‑Do List
 
 - Bob generated a to‑do list based on the provided prompt.
 
-- Prompted the Bob with `I dont have the docker in my local Mac, but I have PodMan.`
+- Bob was then prompted with `I dont have the docker in my local Mac, but I have PodMan.`
 
 <img src="images/img-12.png" >
 
-- Bob generated a to‑do list again based on the provided prompt.
+- Based on this update, Bob generated a revised to‑do list.
 
-- The to‑do list was reviewed and approved.
+- The updated to‑do list was reviewed and approved.
 
 <img src="images/img-13.png" >
 
 ### 3. Creating the App
 
-- Bob created the web app.
+- Bob created the web application.
 
-- Bob updated the to‑do list .
+- Bob updated the to‑do list accordingly.
 
 <img src="images/img-14.png" >
 
-### 4. Building Container Image 
+### 4. Building the Container Image
 
-- Bob is building the container image
+- Bob built the container image using Podman
 
 <img src="images/img-15.png" >
 
 ### 5. IBM Code Engine login
 
-- Bob login to the IBM Code Engine with the given API Key
+- Bob logged in to IBM Code Engine using the provided API key
 
 <img src="images/img-16.png" >
 
 ### 6. Target Resource Group
 
-- Bob Sets the target resource Group
+- Bob set the target resource group.
 
 <img src="images/img-17.png" >
 
 ### 6. Container Registry login
 
-- Bob login to the IBM Container Registry
+- Bob logged in to the IBM Container Registry
 
 <img src="images/img-18.png" >
 
-### 7. Push image to Container Registry
+### 7. Push Image to Container Registry
 
-- Bob Pushed the image to IBM Container Registry
+- Bob pushed the container image to the IBM Container Registry
 
 <img src="images/img-19.png" >
 
-### 8. Creating Project in the Code Engine
+### 8. Creating a Project in IBM Code Engine
 
-- Bob creates the Project in the IBM Code Engine
+- Bob created a project in IBM Code Engine.
 
 <img src="images/img-20.png" >
 
 <img src="images/img-21.png" >
 
-### 9. Creating App in the Code Engine
+### 9. Creating the App in IBM Code Engine
 
-- Bob creates the App in the IBM Code Engine with the given image
+- Bob created the application in IBM Code Engine using the provided container image.
 
-- Bob Prints the url of the application.
+- Bob displayed the application URL after deployment.
 
 <img src="images/img-23.png" >
 
-- The app is successfully deployed in the IBM Code Engine.
-
+- The application was successfully deployed to IBM Code Engine.
