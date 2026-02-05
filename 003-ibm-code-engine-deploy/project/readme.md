@@ -1,7 +1,8 @@
+# Python Web App on IBM Code Engine
 
-# Create and Deploy an app in IBM Code Engine using IBM Bob
+## 🎯 Objective
 
-This article demonstrates how IBM Bob is leveraged to build a simple Python  Flask web application, containerizing it using Podman, pushing the container image to IBM Container Registry, and deploying it on IBM Code Engine. 
+This project demonstrates a complete cloud-native deployment workflow by creating a simple Python Flask web application, containerizing it using Podman, pushing the container image to IBM Container Registry, and deploying it on IBM Code Engine. The goal is to showcase modern DevOps practices and IBM Cloud services integration.
 
 ## 🏗️ Architecture Diagram
 
@@ -89,92 +90,140 @@ This article demonstrates how IBM Bob is leveraged to build a simple Python  Fla
   - container-registry
 - **Authentication**: IBM Cloud API Key
 
-
-## Building the App Using Bob
-
-### 1. Provide the Initial Prompt in the Bob
-
-- The following prompt was entered to request Bob to create the app.
+## 📁 Project Structure
 
 ```
-Generate a simple web app using python.
-Containerize the app and push it to IBM Container Registry.
-Deploy the app in IBM Code Engine.
-The Resource-Group for the IBM Container Registry and IBM Code Engine is "itz-wxo-697b4e2bf2289c92dfa7cf".
-The namespace for IBM Container Registry is "cr-itz-3uehbja7".
-The API Key for IBM Cloud is "xxxxxxxxxxx"
-
+.
+├── app.py              # Flask application with REST endpoints
+├── Dockerfile          # Container image definition
+├── requirements.txt    # Python dependencies
+└── README.md          # Project documentation
 ```
 
-<img src="images/img-11.png" >
+## 🚀 Application Endpoints
 
-### 2. Review and Approve To‑Do List
+### Root Endpoint
+- **URL**: `/`
+- **Method**: GET
+- **Response**: JSON with application status and welcome message
 
-- Bob generated a to‑do list based on the provided prompt.
+```json
+{
+  "message": "Hello from IBM Code Engine!",
+  "status": "running",
+  "app": "Simple Python Web App"
+}
+```
 
-- Prompted the Bob with `I dont have the docker in my local Mac, but I have PodMan.`
+### Health Check Endpoint
+- **URL**: `/health`
+- **Method**: GET
+- **Response**: JSON with health status
 
-<img src="images/img-12.png" >
+```json
+{
+  "status": "healthy"
+}
+```
 
-- Bob generated a to‑do list again based on the provided prompt.
+## 🔧 Deployment Details
 
-- The to‑do list was reviewed and approved.
+### Container Registry
+- **Registry**: us.icr.io
+- **Namespace**: cr-itz-3uehbja7
+- **Image**: python-web-app:latest
+- **Full Image Path**: `us.icr.io/cr-itz-3uehbja7/python-web-app:latest`
 
-<img src="images/img-13.png" >
+### Code Engine Configuration
+- **Project Name**: python-web-app-project
+- **Application Name**: python-web-app
+- **Port**: 8080
+- **Registry Secret**: icr-secret
+- **Auto-scaling**: Enabled (managed by Code Engine)
 
-### 3. Creating the App
+## 📝 Deployment Steps
 
-- Bob created the web app.
+1. **Build Container Image**
+   ```bash
+   podman build -t python-web-app:latest .
+   ```
 
-- Bob updated the to‑do list .
+2. **Authenticate with IBM Cloud**
+   ```bash
+   ibmcloud login --apikey <API_KEY> -r us-south
+   ibmcloud target -g itz-wxo-697b4e2bf2289c92dfa7cf
+   ```
 
-<img src="images/img-14.png" >
+3. **Login to Container Registry**
+   ```bash
+   ibmcloud cr login
+   ```
 
-### 4. Building Container Image 
+4. **Tag and Push Image**
+   ```bash
+   podman tag localhost/python-web-app:latest us.icr.io/cr-itz-3uehbja7/python-web-app:latest
+   podman push us.icr.io/cr-itz-3uehbja7/python-web-app:latest
+   ```
 
-- Bob is building the container image
+5. **Create Code Engine Project**
+   ```bash
+   ibmcloud ce project create --name python-web-app-project
+   ```
 
-<img src="images/img-15.png" >
+6. **Create Registry Secret**
+   ```bash
+   ibmcloud ce registry create --name icr-secret --server us.icr.io --username iamapikey --password <API_KEY>
+   ```
 
-### 5. IBM Code Engine login
+7. **Deploy Application**
+   ```bash
+   ibmcloud ce application create --name python-web-app --image us.icr.io/cr-itz-3uehbja7/python-web-app:latest --registry-secret icr-secret --port 8080
+   ```
 
-- Bob login to the IBM Code Engine with the given API Key
+## 🌐 Access the Application
 
-<img src="images/img-16.png" >
+The application is deployed and accessible at:
+**https://python-web-app.25vld93gsqo2.us-south.codeengine.appdomain.cloud**
 
-### 6. Target Resource Group
+## ✨ Key Features
 
-- Bob Sets the target resource Group
+- **Serverless Deployment**: Runs on IBM Code Engine with automatic scaling
+- **Container-based**: Fully containerized using Podman
+- **Cloud-native**: Leverages IBM Cloud services for registry and compute
+- **RESTful API**: Simple JSON-based REST endpoints
+- **Health Monitoring**: Built-in health check endpoint
+- **Secure**: Uses IBM Cloud API key authentication and registry secrets
 
-<img src="images/img-17.png" >
+## 🔐 Security
 
-### 6. Container Registry login
+- API keys are used for authentication with IBM Cloud services
+- Container registry access is secured with registry secrets
+- Application runs in isolated Code Engine environment
+- HTTPS endpoint provided by default
 
-- Bob login to the IBM Container Registry
+## 📊 Benefits of This Architecture
 
-<img src="images/img-18.png" >
+1. **Scalability**: Code Engine automatically scales based on demand
+2. **Cost-Effective**: Pay only for actual usage (serverless model)
+3. **Portability**: Container-based deployment ensures consistency
+4. **Managed Infrastructure**: No server management required
+5. **High Availability**: Built-in redundancy and load balancing
+6. **Fast Deployment**: Quick iteration and deployment cycles
 
-### 7. Push image to Container Registry
+## 🎓 Learning Outcomes
 
-- Bob Pushed the image to IBM Container Registry
+This project demonstrates:
+- Building Python web applications with Flask
+- Containerizing applications using Podman
+- Working with IBM Container Registry
+- Deploying serverless applications on IBM Code Engine
+- Managing cloud resources using IBM Cloud CLI
+- Implementing DevOps best practices
 
-<img src="images/img-19.png" >
+## 📄 License
 
-### 8. Creating Project in the Code Engine
+This is a demonstration project for learning purposes.
 
-- Bob creates the Project in the IBM Code Engine
+---
 
-<img src="images/img-20.png" >
-
-<img src="images/img-21.png" >
-
-### 9. Creating App in the Code Engine
-
-- Bob creates the App in the IBM Code Engine with the given image
-
-- Bob Prints the url of the application.
-
-<img src="images/img-23.png" >
-
-- The app is successfully deployed in the IBM Code Engine.
-
+**Built with ❤️ using IBM Cloud Services**
